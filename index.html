@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codenames</title>
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>CODENAMES</h1>
+    <button id="new-game-setup" type="button">New Game</button>
+  </header>
+
+  <section id="status">
+    <div id="turn-banner"></div>
+    <div id="scoreboard">
+      <span id="score-red" class="score red"></span>
+      <span id="score-blue" class="score blue"></span>
+    </div>
+  </section>
+
+  <main id="board"></main>
+
+  <section id="controls">
+    <div id="clue-controls">
+      <button id="reveal-key" type="button">Spymaster — hold to reveal key</button>
+      <div class="clue-entry">
+        <input id="clue-word" type="text" placeholder="Clue word" autocomplete="off" />
+        <input id="clue-number" type="number" min="0" max="9" value="1" />
+        <button id="submit-clue" type="button">Give clue</button>
+      </div>
+    </div>
+
+    <div id="guess-controls" hidden>
+      <div id="clue-display"></div>
+      <div id="guesses-left"></div>
+      <button id="end-guessing" type="button">End guessing</button>
+    </div>
+
+    <div id="gameover" hidden>
+      <div id="winner-text"></div>
+      <button id="new-game" type="button">New Game</button>
+    </div>
+  </section>
+
+  <footer>
+    <span id="version">v1.0.0</span>
+  </footer>
+
+  <script type="module" src="ui.js"></script>
+</body>
+</html>
