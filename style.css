@@ -95,13 +95,17 @@ button:active { transform: translateY(1px); }
   gap: 8px;
 }
 
-#rules-panel {
-  flex: 0 0 280px;
+/* Shared kraft "card" chrome for side/setup panels. */
+#rules-panel, #custom-words {
   background: var(--paper);
   border: 2px solid var(--kraft-dark);
   border-radius: 8px;
-  padding: 12px 14px;
   color: var(--ink);
+}
+
+#rules-panel {
+  flex: 0 0 280px;
+  padding: 12px 14px;
 }
 #rules-panel h2 {
   margin: 0 0 8px;
@@ -174,7 +178,7 @@ button:active { transform: translateY(1px); }
 }
 .clue-entry { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 #clue-word { flex: 1; min-width: 140px; }
-input {
+input, select, textarea {
   font-family: inherit;
   font-size: 1rem;
   padding: 0.5em;
@@ -200,14 +204,11 @@ footer { margin-top: auto; padding-top: 16px; }
   font-size: 0.85rem;
 }
 #theme-select {
-  font-family: inherit;
   font-weight: bold;
   font-size: 0.9rem;
   padding: 0.5em 0.6em;
   background: var(--paper);
   color: var(--ink);
-  border: 2px solid var(--ink);
-  border-radius: 6px;
   cursor: pointer;
 }
 
@@ -215,20 +216,12 @@ footer { margin-top: auto; padding-top: 16px; }
   width: 100%;
   max-width: 1180px;
   margin: 8px auto 0;
-  background: var(--paper);
-  border: 2px solid var(--kraft-dark);
-  border-radius: 8px;
   padding: 10px 14px;
-  color: var(--ink);
 }
 #custom-words label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 6px; }
 #custom-input {
   width: 100%;
-  font-family: inherit;
   font-size: 0.95rem;
-  padding: 0.5em;
-  border: 2px solid var(--ink);
-  border-radius: 6px;
   resize: vertical;
 }
 .custom-actions { display: flex; align-items: center; gap: 12px; margin-top: 8px; flex-wrap: wrap; }

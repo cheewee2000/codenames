@@ -138,12 +138,17 @@ function buildThemeOptions() {
   select.value = currentDeck;
 }
 
+// Reveal the custom-words panel, pre-filled with any saved custom list.
+function showCustomPanel() {
+  el("custom-words").hidden = false;
+  el("custom-input").value = loadSetting(CUSTOM_KEY) || "";
+  el("custom-error").textContent = "";
+}
+
 function onThemeChange() {
   const value = el("theme-select").value;
   if (value === CUSTOM) {
-    el("custom-words").hidden = false;
-    el("custom-input").value = loadSetting(CUSTOM_KEY) || "";
-    el("custom-error").textContent = "";
+    showCustomPanel();
     return; // wait for Apply before starting a custom game
   }
   el("custom-words").hidden = true;
@@ -189,9 +194,6 @@ el("theme-select").addEventListener("change", onThemeChange);
 el("apply-custom").addEventListener("click", onApplyCustom);
 
 buildThemeOptions();
-if (currentDeck === CUSTOM) {
-  el("custom-words").hidden = false;
-  el("custom-input").value = loadSetting(CUSTOM_KEY) || "";
-}
+if (currentDeck === CUSTOM) showCustomPanel();
 
 render();
