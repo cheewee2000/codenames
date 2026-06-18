@@ -51,3 +51,100 @@ test("createGame picks 25 distinct words from the list", () => {
   const set = new Set(g.cards.map((c) => c.word));
   assert.equal(set.size, 25);
 });
+
+import { submitClue, applyGuess, endTurn } from "../game-logic.js";
+
+// Build a game with a known board layout for deterministic referee tests.
+function fixedGame() {
+  const g = createGame(Array.from({ length: 100 }, (_, i) => "W" + i), () => 0.1);
+  // Force a known layout: index 0 red, 1 blue, 2 neutral, 3 assassin, rest neutral.
+  g.cards.forEach((c, i) => { c.role = "neutral"; c.revealed = false; });
+  g.cards[0].role = "red";
+  g.cards[1].role = "blue";
+  g.cards[3].role = "assassin";
+  g.startingTeam = "red";
+  g.currentTeam = "red";
+  g.phase = "clue";
+  g.currentClue = null;
+  g.guessesRemaining = 0;
+  g.winner = null;
+  g.redRemaining = 1;
+  g.blueRemaining = 1;
+  return g;
+}
+
+test("submitClue moves to guess phase with number+1 guesses", () => {
+  const g = fixedGame();
+  submitClue(g, "OCEAN", 2);
+  assert.deepEqual(g.currentClue, { word: "OCEAN", number: 2 });
+  assert.equal(g.guessesRemaining, 3);
+  assert.equal(g.phase, "guess");
+});
+
+test("guessing your own color decrements remaining and continues", () => {
+  const g = fixedGame();
+  submitClue(g, "OCEAN", 2); // guessesRemaining 3
+  applyGuess(g, 0); // red card, current team red
+  assert.equal(g.cards[0].revealed, true);
+  assert.equal(g.redRemaining, 0);   // was 1, now 0 -> red wins
+  assert.equal(g.winner, "red");
+  assert.equal(g.phase, "gameover");
+});
+
+test("guessing a neutral ends the turn", () => {
+  const g = fixedGame();
+  submitClue(g, "OCEAN", 2);
+  applyGuess(g, 2); // neutral
+  assert.equal(g.cards[2].revealed, true);
+  assert.equal(g.phase, "clue");
+  assert.equal(g.currentTeam, "blue");
+  assert.equal(g.guessesRemaining, 0);
+});
+
+test("guessing the opponent color decrements them and ends turn", () => {
+  const g = fixedGame();
+  submitClue(g, "OCEAN", 2);
+  applyGuess(g, 1); // blue card while red is guessing
+  assert.equal(g.blueRemaining, 0); // was 1 -> blue wins
+  assert.equal(g.winner, "blue");
+  assert.equal(g.phase, "gameover");
+});
+
+test("guessing the assassin loses immediately", () => {
+  const g = fixedGame();
+  submitClue(g, "OCEAN", 2);
+  applyGuess(g, 3); // assassin
+  assert.equal(g.phase, "gameover");
+  assert.equal(g.winner, "blue"); // red guessed it, so blue wins
+});
+
+test("running out of guesses ends the turn", () => {
+  const g = fixedGame();
+  g.cards[4].role = "red";
+  g.redRemaining = 2;
+  submitClue(g, "OCEAN", 0); // guessesRemaining = 1
+  applyGuess(g, 0); // red, correct, guessesRemaining 1 -> 0 -> end turn
+  assert.equal(g.phase, "clue");
+  assert.equal(g.currentTeam, "blue");
+});
+
+test("applyGuess ignores already-revealed cards and wrong phase", () => {
+  const g = fixedGame();
+  applyGuess(g, 0); // phase is 'clue' -> no-op
+  assert.equal(g.cards[0].revealed, false);
+  submitClue(g, "OCEAN", 2);
+  applyGuess(g, 2); // reveal neutral, ends turn (phase clue again)
+  const before = g.cards[2].revealed;
+  applyGuess(g, 2); // phase clue now -> no-op
+  assert.equal(g.cards[2].revealed, before);
+});
+
+test("endTurn flips team and resets clue", () => {
+  const g = fixedGame();
+  submitClue(g, "OCEAN", 2);
+  endTurn(g);
+  assert.equal(g.currentTeam, "blue");
+  assert.equal(g.phase, "clue");
+  assert.equal(g.currentClue, null);
+  assert.equal(g.guessesRemaining, 0);
+});
