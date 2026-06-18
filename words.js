@@ -50,3 +50,68 @@ export const WORDS = [
   "VET", "WAKE", "WALL", "WAR", "WASHER", "WASHINGTON", "WATCH", "WATER",
   "WAVE", "WEB", "WELL", "WHALE", "WHIP", "WIND", "WITCH", "WORM", "YARD"
 ];
+
+export const THEMES = {
+  "Default": WORDS,
+  "Animals": [
+    "LION", "TIGER", "BEAR", "WOLF", "FOX", "DEER", "MOOSE", "RABBIT", "SQUIRREL",
+    "BEAVER", "OTTER", "BADGER", "HEDGEHOG", "MOLE", "BAT", "OWL", "EAGLE", "HAWK",
+    "FALCON", "ROBIN", "SPARROW", "CROW", "RAVEN", "PARROT", "PENGUIN", "OSTRICH",
+    "FLAMINGO", "PEACOCK", "SWAN", "DUCK", "GOOSE", "CHICKEN", "TURKEY", "HORSE",
+    "DONKEY", "ZEBRA", "GIRAFFE", "ELEPHANT", "RHINO", "HIPPO", "CAMEL", "KANGAROO",
+    "KOALA", "PANDA", "MONKEY", "GORILLA", "SLOTH", "CROCODILE", "SNAKE", "LIZARD",
+    "TURTLE", "FROG", "SHARK", "WHALE", "DOLPHIN", "OCTOPUS", "JELLYFISH", "CRAB",
+    "LOBSTER", "STARFISH", "SEAHORSE", "SEAL", "WALRUS"
+  ],
+  "Movies & TV": [
+    "ACTOR", "DIRECTOR", "SCRIPT", "SCENE", "CAMERA", "STUDIO", "SEQUEL", "TRAILER",
+    "POPCORN", "OSCAR", "VILLAIN", "HERO", "SIDEKICK", "PLOT", "TWIST", "CLIFFHANGER",
+    "PILOT", "EPISODE", "SEASON", "FINALE", "REBOOT", "REMAKE", "CARTOON", "ANIMATION",
+    "COMEDY", "DRAMA", "THRILLER", "HORROR", "WESTERN", "MUSICAL", "ROMANCE",
+    "DOCUMENTARY", "BLOCKBUSTER", "CASTING", "STUNT", "CAMEO", "MONTAGE", "SOUNDTRACK",
+    "CREDITS", "PREMIERE", "RED CARPET", "SCREEN", "THEATER", "MATINEE", "BINGE",
+    "STREAMING", "NETWORK", "CHANNEL", "SITCOM", "SPINOFF", "FRANCHISE", "PREQUEL",
+    "SCREENPLAY", "BOX OFFICE"
+  ],
+  "Food & Drink": [
+    "APPLE", "BANANA", "ORANGE", "GRAPE", "LEMON", "LIME", "CHERRY", "PEACH", "MANGO",
+    "MELON", "BERRY", "BREAD", "BUTTER", "CHEESE", "EGG", "BACON", "SAUSAGE", "STEAK",
+    "RICE", "PASTA", "NOODLE", "PIZZA", "BURGER", "TACO", "SUSHI", "SALAD", "SOUP",
+    "STEW", "CURRY", "SAUCE", "PEPPER", "SALT", "SUGAR", "HONEY", "JAM", "CAKE",
+    "COOKIE", "PIE", "DONUT", "CHOCOLATE", "CANDY", "ICE CREAM", "COFFEE", "TEA",
+    "JUICE", "SODA", "MILK", "WINE", "SMOOTHIE", "PANCAKE", "WAFFLE", "CEREAL",
+    "TOAST", "OMELETTE"
+  ],
+  "Space": [
+    "STAR", "PLANET", "MOON", "SUN", "COMET", "ASTEROID", "METEOR", "GALAXY", "NEBULA",
+    "COSMOS", "ORBIT", "GRAVITY", "ECLIPSE", "CRATER", "ROCKET", "SHUTTLE", "SATELLITE",
+    "PROBE", "ROVER", "LANDER", "ASTRONAUT", "COSMONAUT", "SPACESUIT", "HELMET",
+    "LAUNCH", "COUNTDOWN", "MISSION", "STATION", "TELESCOPE", "OBSERVATORY", "MERCURY",
+    "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE", "PLUTO",
+    "BLACK HOLE", "SUPERNOVA", "CONSTELLATION", "ASTRONOMY", "UNIVERSE", "METEORITE",
+    "SOLAR", "LUNAR", "ALIEN", "UFO"
+  ],
+  "Sports": [
+    "SOCCER", "FOOTBALL", "BASEBALL", "BASKETBALL", "HOCKEY", "TENNIS", "GOLF",
+    "CRICKET", "RUGBY", "VOLLEYBALL", "BADMINTON", "BOXING", "WRESTLING", "JUDO",
+    "KARATE", "FENCING", "ARCHERY", "ROWING", "SAILING", "SURFING", "SKIING",
+    "SNOWBOARD", "SKATING", "CYCLING", "RUNNING", "SPRINT", "MARATHON", "HURDLES",
+    "JAVELIN", "DISCUS", "GYMNASTICS", "DIVING", "SWIMMING", "BOWLING", "BILLIARDS",
+    "DARTS", "CURLING", "LACROSSE", "POLO", "REFEREE", "UMPIRE", "COACH", "STADIUM",
+    "JERSEY", "TROPHY", "MEDAL", "WHISTLE", "PENALTY", "OFFSIDE", "TOUCHDOWN", "DUNK",
+    "SERVE", "RALLY"
+  ],
+};
+
+export function parseWordList(text) {
+  const seen = new Set();
+  const out = [];
+  for (const raw of String(text).split(/[\n,]+/)) {
+    const w = raw.trim().toUpperCase();
+    if (w && !seen.has(w)) {
+      seen.add(w);
+      out.push(w);
+    }
+  }
+  return out;
+}
