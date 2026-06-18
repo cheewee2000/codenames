@@ -10,6 +10,32 @@ function teamLabel(t) {
   return t === "red" ? "RED" : "BLUE";
 }
 
+function teamEmoji(t) {
+  return t === "red" ? "🔴" : "🔵";
+}
+
+function instructionFor(game) {
+  const team = teamLabel(game.currentTeam);
+  if (game.phase === "clue") {
+    return `<p class="handoff">▸ Pass the device to the ${team} Spymaster.</p>
+      <ol class="steps">
+        <li>Hold the key button to see your team's words.</li>
+        <li>Think of a one-word clue that links some of them.</li>
+        <li>Enter the clue and a number, then press "Give clue".</li>
+        <li>Pass the device to your operatives.</li>
+      </ol>`;
+  }
+  if (game.phase === "guess") {
+    return `<p class="handoff">▸ ${team} operatives, it's your turn.</p>
+      <p>Tap the words you think are yours. Correct → keep going (up to ${game.guessesRemaining} left this turn). Wrong → your turn ends. Press "End guessing" to stop. <strong>Avoid the assassin!</strong></p>`;
+  }
+  if (game.phase === "gameover") {
+    const byAssassin = game.cards.some((c) => c.role === "assassin" && c.revealed);
+    return `<p>${byAssassin ? "The assassin was revealed. " : ""}Press "New Game" to play again.</p>`;
+  }
+  return "";
+}
+
 function render() {
   // Board
   board.innerHTML = "";
@@ -35,19 +61,24 @@ function render() {
   overC.hidden = game.phase !== "gameover";
 
   if (game.phase === "clue") {
-    el("turn-banner").textContent = teamLabel(game.currentTeam) + " spymaster — give a clue";
+    el("turn-banner").textContent =
+      teamEmoji(game.currentTeam) + " " + teamLabel(game.currentTeam) + " Spymaster's turn";
     el("clue-word").value = "";
     el("clue-number").value = "1";
   } else if (game.phase === "guess") {
-    el("turn-banner").textContent = teamLabel(game.currentTeam) + " operatives — make your guesses";
+    el("turn-banner").textContent =
+      teamEmoji(game.currentTeam) + " " + teamLabel(game.currentTeam) + " Operatives — guessing";
     el("clue-display").textContent =
       game.currentClue.word.toUpperCase() + " : " + game.currentClue.number;
     el("guesses-left").textContent = "Guesses left: " + game.guessesRemaining;
   } else if (game.phase === "gameover") {
     const byAssassin = game.cards.some((c) => c.role === "assassin" && c.revealed);
+    el("turn-banner").textContent = teamEmoji(game.winner) + " " + teamLabel(game.winner) + " WINS";
     el("winner-text").textContent =
-      teamLabel(game.winner) + " WINS" + (byAssassin ? " (assassin!)" : "");
+      teamEmoji(game.winner) + " " + teamLabel(game.winner) + " WINS" + (byAssassin ? " (assassin!)" : "");
   }
+
+  el("instructions").innerHTML = instructionFor(game);
 }
 
 function onCardClick(i) {

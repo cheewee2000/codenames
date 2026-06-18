@@ -24,7 +24,22 @@
     </div>
   </section>
 
-  <main id="board"></main>
+  <section id="instructions"></section>
+
+  <div id="game-area">
+    <main id="board"></main>
+    <aside id="rules-panel">
+      <h2>How to Play</h2>
+      <ul class="rules">
+        <li><strong>🎯 Goal</strong> — Be the first team to tap all of your agent words. Tap the assassin and your team loses instantly.</li>
+        <li><strong>👥 Teams</strong> — Red and Blue. Each team has one Spymaster; everyone else are Operatives.</li>
+        <li><strong>🕵️ Spymaster</strong> — Hold the key button to see which words are your team's, then give a one-word clue and a number (how many words it points to).</li>
+        <li><strong>🔍 Operatives</strong> — Tap the words the clue points to. You get up to (number + 1) guesses.</li>
+        <li><strong>🃏 Cards</strong> — Your color: keep guessing. Neutral or the other team: your turn ends. Assassin (black): instant loss.</li>
+        <li><strong>🔄 One screen</strong> — Pass the device between Spymaster and Operatives as the prompts say.</li>
+      </ul>
+    </aside>
+  </div>
 
   <section id="controls">
     <div id="clue-controls">
@@ -49,7 +64,7 @@
   </section>
 
   <footer>
-    <span id="version">v1.0.0</span>
+    <span id="version">v1.1.0</span>
   </footer>
 
   <script type="module" src="ui.js"></script>

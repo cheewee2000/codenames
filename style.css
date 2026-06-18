@@ -25,7 +25,7 @@ body {
 
 header {
   width: 100%;
-  max-width: 900px;
+  max-width: 1180px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,7 +54,7 @@ button:active { transform: translateY(1px); }
 
 #status {
   width: 100%;
-  max-width: 900px;
+  max-width: 1180px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -78,12 +78,60 @@ button:active { transform: translateY(1px); }
 .score.red { background: var(--red); }
 .score.blue { background: var(--blue); }
 
-#board {
+#game-area {
   width: 100%;
-  max-width: 900px;
+  max-width: 1180px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin: 0 auto;
+}
+
+#board {
+  flex: 1 1 auto;
+  min-width: 0;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
+}
+
+#rules-panel {
+  flex: 0 0 280px;
+  background: var(--paper);
+  border: 2px solid var(--kraft-dark);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: var(--ink);
+}
+#rules-panel h2 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+#rules-panel ul.rules { list-style: none; margin: 0; padding: 0; }
+#rules-panel ul.rules li { font-size: 0.8rem; line-height: 1.45; margin-bottom: 9px; }
+#rules-panel ul.rules li:last-child { margin-bottom: 0; }
+
+#instructions {
+  width: 100%;
+  max-width: 1180px;
+  margin: 4px auto 10px;
+  background: rgba(0, 0, 0, 0.18);
+  border-left: 4px solid var(--kraft);
+  border-radius: 6px;
+  padding: 8px 14px;
+  color: var(--paper);
+}
+#instructions .handoff { font-weight: bold; color: var(--kraft); margin: 0 0 6px; letter-spacing: 0.04em; }
+#instructions ol.steps { margin: 0; padding-left: 1.3em; }
+#instructions ol.steps li { margin-bottom: 3px; font-size: 0.9rem; line-height: 1.35; }
+#instructions p { margin: 0 0 4px; font-size: 0.9rem; line-height: 1.4; }
+#instructions p:last-child { margin-bottom: 0; }
+
+@media (max-width: 860px) {
+  #game-area { flex-direction: column; }
+  #rules-panel { flex: 1 1 auto; width: 100%; }
 }
 
 .card {
@@ -120,7 +168,7 @@ button:active { transform: translateY(1px); }
 
 #controls {
   width: 100%;
-  max-width: 900px;
+  max-width: 1180px;
   margin-top: 12px;
   color: var(--paper);
 }
