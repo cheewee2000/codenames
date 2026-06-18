@@ -1,0 +1,144 @@
+:root {
+  --kraft: #c8a96a;
+  --kraft-dark: #b8975a;
+  --paper: #efe6d2;
+  --ink: #2b2620;
+  --red: #b03a2e;
+  --blue: #2e5f8a;
+  --neutral: #d9c6a0;
+  --assassin: #1c1815;
+  font-family: "Courier New", Courier, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #3a322a;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 12px;
+}
+
+header {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header h1 {
+  color: var(--paper);
+  letter-spacing: 0.3em;
+  font-size: 1.8rem;
+  margin: 0.4em 0;
+}
+
+button {
+  font-family: inherit;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--kraft);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  padding: 0.6em 1em;
+  cursor: pointer;
+}
+button:active { transform: translateY(1px); }
+
+#status {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+}
+
+#turn-banner {
+  color: var(--paper);
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+#scoreboard { display: flex; gap: 12px; }
+.score {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 0.2em 0.6em;
+  border-radius: 6px;
+  color: var(--paper);
+}
+.score.red { background: var(--red); }
+.score.blue { background: var(--blue); }
+
+#board {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.card {
+  aspect-ratio: 3 / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4px;
+  background: var(--paper);
+  border: 2px solid var(--kraft-dark);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 4px rgba(0,0,0,0.04), 0 2px 3px rgba(0,0,0,0.3);
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  font-size: clamp(0.55rem, 2.2vw, 1rem);
+  transition: transform 0.15s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.card.revealed { cursor: default; transform: rotateX(4deg); color: var(--paper); }
+.card.revealed.red { background: var(--red); border-color: #7c281f; }
+.card.revealed.blue { background: var(--blue); border-color: #1f4360; }
+.card.revealed.neutral { background: var(--neutral); color: var(--ink); border-color: var(--kraft-dark); }
+.card.revealed.assassin { background: var(--assassin); border-color: #000; }
+
+/* Spymaster hold-to-reveal: tint unrevealed cards with their true color. */
+#board.key-peek .card:not(.revealed).red { box-shadow: inset 0 0 0 6px var(--red); }
+#board.key-peek .card:not(.revealed).blue { box-shadow: inset 0 0 0 6px var(--blue); }
+#board.key-peek .card:not(.revealed).neutral { box-shadow: inset 0 0 0 6px var(--neutral); }
+#board.key-peek .card:not(.revealed).assassin { box-shadow: inset 0 0 0 6px var(--assassin); }
+
+#controls {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 12px;
+  color: var(--paper);
+}
+.clue-entry { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+#clue-word { flex: 1; min-width: 140px; }
+input {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5em;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+}
+#clue-number { width: 70px; }
+#reveal-key { width: 100%; background: var(--kraft-dark); }
+#clue-display { font-size: 1.3rem; font-weight: bold; letter-spacing: 0.1em; }
+#guesses-left { margin: 6px 0; }
+#gameover { text-align: center; }
+#winner-text { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; }
+
+footer { margin-top: auto; padding-top: 16px; }
+#version { color: var(--kraft); font-size: 0.8rem; letter-spacing: 0.1em; }
