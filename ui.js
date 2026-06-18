@@ -1,5 +1,5 @@
 import { WORDS } from "./words.js";
-import { createGame, submitClue, applyGuess, endTurn, other } from "./game-logic.js";
+import { createGame, submitClue, applyGuess, endTurn } from "./game-logic.js";
 
 const el = (id) => document.getElementById(id);
 const board = el("board");
