@@ -59,7 +59,7 @@ function onCardClick(i) {
 function onSubmitClue() {
   const word = el("clue-word").value.trim();
   const number = parseInt(el("clue-number").value, 10);
-  if (!word || Number.isNaN(number) || number < 0) return;
+  if (!word || word.includes(" ") || Number.isNaN(number) || number < 0) return;
   submitClue(game, word, number);
   render();
 }
@@ -78,6 +78,7 @@ revealBtn.addEventListener("mouseup", hideKey);
 revealBtn.addEventListener("mouseleave", hideKey);
 revealBtn.addEventListener("touchstart", (e) => { e.preventDefault(); showKey(); }, { passive: false });
 revealBtn.addEventListener("touchend", (e) => { e.preventDefault(); hideKey(); });
+revealBtn.addEventListener("touchcancel", hideKey);
 
 el("submit-clue").addEventListener("click", onSubmitClue);
 el("clue-word").addEventListener("keydown", (e) => { if (e.key === "Enter") onSubmitClue(); });

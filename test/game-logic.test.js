@@ -148,3 +148,16 @@ test("endTurn flips team and resets clue", () => {
   assert.equal(g.currentClue, null);
   assert.equal(g.guessesRemaining, 0);
 });
+
+test("guessing an opponent card they don't run out of switches the turn", () => {
+  const g = fixedGame();
+  g.cards[4].role = "blue";   // a second blue card so blue won't hit zero
+  g.blueRemaining = 2;
+  submitClue(g, "OCEAN", 2);
+  applyGuess(g, 1); // red taps a blue card; blue still has 1 left
+  assert.equal(g.cards[1].revealed, true);
+  assert.equal(g.blueRemaining, 1);
+  assert.equal(g.winner, null);
+  assert.equal(g.phase, "clue");
+  assert.equal(g.currentTeam, "blue");
+});
