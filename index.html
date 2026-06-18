@@ -13,8 +13,21 @@
 <body>
   <header>
     <h1>CODENAMES</h1>
-    <button id="new-game-setup" type="button">New Game</button>
+    <div id="setup">
+      <label id="theme-label" for="theme-select">Deck</label>
+      <select id="theme-select"></select>
+      <button id="new-game-setup" type="button">New Game</button>
+    </div>
   </header>
+
+  <section id="custom-words" hidden>
+    <label for="custom-input">Your own words — one per line or comma-separated (at least 25):</label>
+    <textarea id="custom-input" rows="4" placeholder="APPLE&#10;BANANA&#10;CHERRY&#10;..."></textarea>
+    <div class="custom-actions">
+      <button id="apply-custom" type="button">Use these words</button>
+      <span id="custom-error" class="error" role="alert"></span>
+    </div>
+  </section>
 
   <section id="status">
     <div id="turn-banner"></div>
@@ -37,6 +50,7 @@
         <li><strong>🔍 Operatives</strong> — Tap the words the clue points to. You get up to (number + 1) guesses.</li>
         <li><strong>🃏 Cards</strong> — Your color: keep guessing. Neutral or the other team: your turn ends. Assassin (black): instant loss.</li>
         <li><strong>🔄 One screen</strong> — Pass the device between Spymaster and Operatives as the prompts say.</li>
+        <li><strong>🎨 Deck</strong> — Pick a word theme — or paste your own — from the Deck menu up top.</li>
       </ul>
     </aside>
   </div>
@@ -64,7 +78,7 @@
   </section>
 
   <footer>
-    <span id="version">v1.1.0</span>
+    <span id="version">v1.2.0</span>
   </footer>
 
   <script type="module" src="ui.js"></script>

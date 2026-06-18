@@ -1,10 +1,35 @@
-import { WORDS } from "./words.js";
+import { THEMES, parseWordList } from "./words.js";
 import { createGame, submitClue, applyGuess, endTurn } from "./game-logic.js";
 
 const el = (id) => document.getElementById(id);
 const board = el("board");
 
-let game = createGame(WORDS);
+const CUSTOM = "Custom…";
+const MIN_WORDS = 25;
+const THEME_KEY = "codenames.theme";
+const CUSTOM_KEY = "codenames.customWords";
+
+function loadSetting(key) {
+  try { return localStorage.getItem(key); } catch (e) { return null; }
+}
+function saveSetting(key, value) {
+  try { localStorage.setItem(key, value); } catch (e) { /* private mode: ignore */ }
+}
+
+// Resolve the deck to start with from saved settings.
+let currentDeck = "Default";
+let currentWords = THEMES["Default"];
+(function restoreDeck() {
+  const saved = loadSetting(THEME_KEY);
+  if (saved === CUSTOM) {
+    const words = parseWordList(loadSetting(CUSTOM_KEY) || "");
+    if (words.length >= MIN_WORDS) { currentDeck = CUSTOM; currentWords = words; }
+  } else if (saved && THEMES[saved]) {
+    currentDeck = saved; currentWords = THEMES[saved];
+  }
+})();
+
+let game = createGame(currentWords);
 
 function teamLabel(t) {
   return t === "red" ? "RED" : "BLUE";
@@ -96,8 +121,52 @@ function onSubmitClue() {
 }
 
 function newGame() {
-  game = createGame(WORDS);
+  game = createGame(currentWords);
   render();
+}
+
+// Populate the theme dropdown from THEMES plus a Custom… entry.
+function buildThemeOptions() {
+  const select = el("theme-select");
+  select.innerHTML = "";
+  for (const name of Object.keys(THEMES).concat(CUSTOM)) {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    select.appendChild(opt);
+  }
+  select.value = currentDeck;
+}
+
+function onThemeChange() {
+  const value = el("theme-select").value;
+  if (value === CUSTOM) {
+    el("custom-words").hidden = false;
+    el("custom-input").value = loadSetting(CUSTOM_KEY) || "";
+    el("custom-error").textContent = "";
+    return; // wait for Apply before starting a custom game
+  }
+  el("custom-words").hidden = true;
+  el("custom-error").textContent = "";
+  currentDeck = value;
+  currentWords = THEMES[value];
+  saveSetting(THEME_KEY, value);
+  newGame();
+}
+
+function onApplyCustom() {
+  const words = parseWordList(el("custom-input").value);
+  if (words.length < MIN_WORDS) {
+    el("custom-error").textContent =
+      "Need at least " + MIN_WORDS + " words — you have " + words.length + ".";
+    return;
+  }
+  el("custom-error").textContent = "";
+  currentDeck = CUSTOM;
+  currentWords = words;
+  saveSetting(THEME_KEY, CUSTOM);
+  saveSetting(CUSTOM_KEY, el("custom-input").value);
+  newGame();
 }
 
 // Hold-to-reveal key
@@ -116,5 +185,13 @@ el("clue-word").addEventListener("keydown", (e) => { if (e.key === "Enter") onSu
 el("end-guessing").addEventListener("click", () => { endTurn(game); render(); });
 el("new-game").addEventListener("click", newGame);
 el("new-game-setup").addEventListener("click", newGame);
+el("theme-select").addEventListener("change", onThemeChange);
+el("apply-custom").addEventListener("click", onApplyCustom);
+
+buildThemeOptions();
+if (currentDeck === CUSTOM) {
+  el("custom-words").hidden = false;
+  el("custom-input").value = loadSetting(CUSTOM_KEY) || "";
+}
 
 render();

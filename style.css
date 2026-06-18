@@ -190,3 +190,46 @@ input {
 
 footer { margin-top: auto; padding-top: 16px; }
 #version { color: var(--kraft); font-size: 0.8rem; letter-spacing: 0.1em; }
+
+#setup { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+#theme-label {
+  color: var(--paper);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+}
+#theme-select {
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 0.5em 0.6em;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#custom-words {
+  width: 100%;
+  max-width: 1180px;
+  margin: 8px auto 0;
+  background: var(--paper);
+  border: 2px solid var(--kraft-dark);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--ink);
+}
+#custom-words label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 6px; }
+#custom-input {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.5em;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  resize: vertical;
+}
+.custom-actions { display: flex; align-items: center; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+#custom-error { color: var(--red); font-weight: bold; font-size: 0.85rem; }
