@@ -41,26 +41,35 @@ function teamEmoji(t) {
   return t === "red" ? "🔴" : "🔵";
 }
 
+// Returns the one-line cue (always visible, doubles as the toggle label) and
+// the collapsible detail body for the current phase.
 function instructionFor(game) {
   const team = teamLabel(game.currentTeam);
   if (game.phase === "clue") {
-    return `<p class="handoff">▸ Pass the device to the ${team} Spymaster.</p>
-      <ol class="steps">
+    return {
+      summary: `Pass the device to the ${team} Spymaster.`,
+      detail: `<ol class="steps">
         <li>Hold the key button to see your team's words.</li>
         <li>Think of a one-word clue that links some of them.</li>
         <li>Enter the clue and a number, then press "Give clue".</li>
         <li>Pass the device to your operatives.</li>
-      </ol>`;
+      </ol>`,
+    };
   }
   if (game.phase === "guess") {
-    return `<p class="handoff">▸ ${team} operatives, it's your turn.</p>
-      <p>Tap the words you think are yours. Correct → keep going (up to ${game.guessesRemaining} left this turn). Wrong → your turn ends. Press "End guessing" to stop. <strong>Avoid the assassin!</strong></p>`;
+    return {
+      summary: `${team} operatives, it's your turn.`,
+      detail: `<p>Tap the words you think are yours. Correct → keep going (up to ${game.guessesRemaining} left this turn). Wrong → your turn ends. Press "End guessing" to stop. <strong>Avoid the assassin!</strong></p>`,
+    };
   }
   if (game.phase === "gameover") {
     const byAssassin = game.cards.some((c) => c.role === "assassin" && c.revealed);
-    return `<p>${byAssassin ? "The assassin was revealed. " : ""}Press "New Game" to play again.</p>`;
+    return {
+      summary: `${byAssassin ? "The assassin was revealed. " : ""}Press "New Game" to play again.`,
+      detail: "",
+    };
   }
-  return "";
+  return { summary: "", detail: "" };
 }
 
 function render() {
@@ -105,7 +114,10 @@ function render() {
       teamEmoji(game.winner) + " " + teamLabel(game.winner) + " WINS" + (byAssassin ? " (assassin!)" : "");
   }
 
-  el("instructions-body").innerHTML = instructionFor(game);
+  const instr = instructionFor(game);
+  el("instructions-summary").textContent = instr.summary;
+  el("instructions-body").innerHTML = instr.detail;
+  el("instructions").classList.toggle("no-detail", !instr.detail);
 }
 
 function onCardClick(i) {
@@ -197,12 +209,9 @@ function setCollapsed(section, toggle, key, min) {
 
 const instrSection = el("instructions");
 const instrToggle = el("instructions-toggle");
-instrToggle.addEventListener("click", () => {
-  const min = !instrSection.classList.contains("collapsed");
-  instrToggle.textContent = min ? "▸" : "▾";
-  instrToggle.title = min ? "Show instructions" : "Minimize instructions";
-  setCollapsed(instrSection, instrToggle, INSTR_MIN_KEY, min);
-});
+instrToggle.addEventListener("click", () =>
+  setCollapsed(instrSection, instrToggle, INSTR_MIN_KEY,
+    !instrSection.classList.contains("collapsed")));
 
 const rulesPanel = el("rules-panel");
 const rulesToggle = el("rules-toggle");
@@ -212,10 +221,7 @@ rulesToggle.addEventListener("click", () =>
 
 // Restore saved minimized state.
 (function restoreCollapsed() {
-  const instrMin = loadSetting(INSTR_MIN_KEY) === "1";
-  instrToggle.textContent = instrMin ? "▸" : "▾";
-  instrToggle.title = instrMin ? "Show instructions" : "Minimize instructions";
-  setCollapsed(instrSection, instrToggle, INSTR_MIN_KEY, instrMin);
+  setCollapsed(instrSection, instrToggle, INSTR_MIN_KEY, loadSetting(INSTR_MIN_KEY) === "1");
   setCollapsed(rulesPanel, rulesToggle, RULES_MIN_KEY, loadSetting(RULES_MIN_KEY) === "1");
 })();
 

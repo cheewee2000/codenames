@@ -149,26 +149,34 @@ button:active { transform: translateY(1px); }
   background: rgba(0, 0, 0, 0.18);
   border-left: 4px solid var(--kraft);
   border-radius: 6px;
-  padding: 8px 14px;
   color: var(--paper);
+}
+/* The handoff cue doubles as a full-width, finger-sized collapse toggle. */
+.instr-header {
+  width: 100%;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
+  min-height: 44px;
+  padding: 6px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--kraft);
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: none;
 }
-#instructions-body { flex: 1; min-width: 0; }
-.collapse-toggle {
-  flex: 0 0 auto;
-  min-height: 0;
-  padding: 0.2em 0.55em;
-  font-size: 1.1rem;
-  line-height: 1.2;
-  border-width: 1px;
-}
-/* Minimized: keep only the one-line handoff cue (or a lone message). */
-#instructions.collapsed ol.steps,
-#instructions.collapsed p:not(.handoff):not(:only-child) { display: none; }
-#instructions.collapsed .handoff { margin-bottom: 0; }
-#instructions .handoff { font-weight: bold; color: var(--kraft); margin: 0 0 6px; letter-spacing: 0.04em; }
+#instructions-summary { flex: 1; min-width: 0; font-size: 0.95rem; }
+.instr-header .chevron { flex: 0 0 auto; font-size: 1rem; }
+.instr-header .chevron::before { content: "▾"; }
+#instructions.collapsed .instr-header .chevron::before { content: "▸"; }
+/* Nothing to expand (e.g. game over): hide the chevron. */
+#instructions.no-detail .chevron { display: none; }
+#instructions-body { padding: 0 14px 10px; }
+#instructions.collapsed #instructions-body { display: none; }
 #instructions ol.steps { margin: 0; padding-left: 1.3em; }
 #instructions ol.steps li { margin-bottom: 3px; font-size: 0.9rem; line-height: 1.35; }
 #instructions p { margin: 0 0 4px; font-size: 0.9rem; line-height: 1.4; }

@@ -38,9 +38,11 @@
   </section>
 
   <section id="instructions">
-    <button id="instructions-toggle" class="collapse-toggle" type="button"
-            aria-expanded="true" aria-controls="instructions-body"
-            title="Minimize instructions">▾</button>
+    <button id="instructions-toggle" class="instr-header" type="button"
+            aria-expanded="true" aria-controls="instructions-body">
+      <span id="instructions-summary"></span>
+      <span class="chevron" aria-hidden="true"></span>
+    </button>
     <div id="instructions-body"></div>
   </section>
 
@@ -86,7 +88,7 @@
   </section>
 
   <footer>
-    <span id="version">v1.3.0</span>
+    <span id="version">v1.3.1</span>
   </footer>
 
   <script type="module" src="ui.js"></script>
