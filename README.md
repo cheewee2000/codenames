@@ -31,4 +31,4 @@ Words are a generic public list, not Codenames' copyrighted set.
 
 ## Version
 
-v1.0.0
+v1.3.0
