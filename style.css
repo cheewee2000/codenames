@@ -72,6 +72,39 @@ button:active { transform: translateY(1px); }
   letter-spacing: 0.1em;
 }
 
+/* Small, chrome-less focus icon pinned to the top-right corner. */
+#minimal-toggle {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 100;
+  width: 30px;
+  height: 30px;
+  min-height: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--kraft);
+  opacity: 0.7;
+}
+#minimal-toggle:hover { opacity: 1; }
+#minimal-toggle svg { display: none; width: 18px; height: 18px; }
+#minimal-toggle .ico-contract { display: block; }
+body.minimal #minimal-toggle .ico-contract { display: none; }
+body.minimal #minimal-toggle .ico-expand { display: block; }
+/* Reserve the corner so the fixed icon never sits on top of content. */
+header { padding-right: 34px; }
+body.minimal #status { padding-right: 34px; }
+
+/* Minimal mode: strip the chrome (title/deck/new-game header, rules, version)
+   down to score, turn cue, board, and controls. */
+body.minimal header,
+body.minimal #rules-panel,
+body.minimal footer { display: none; }
+
 #scoreboard { display: flex; gap: 12px; }
 .score {
   font-weight: bold;
@@ -227,6 +260,36 @@ button:active { transform: translateY(1px); }
   #clue-word { flex: 1 1 100%; }
   #clue-number { flex: 0 0 70px; }
   #submit-clue { flex: 1; }
+}
+
+/* Landscape on a short viewport (a rotated phone/tablet, or a short window):
+   put the action buttons in a right-hand rail beside the board so they're
+   always in view — no scrolling past the board to reach them. */
+@media (orientation: landscape) and (max-height: 820px) {
+  body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+    column-gap: 16px;
+    align-content: start;
+  }
+  header, #custom-words, #status, #instructions, footer { grid-column: 1 / -1; }
+
+  /* Board takes the left column; stack the rules panel under it rather than
+     reserving a fixed side column inside the already-narrowed left column. */
+  #game-area {
+    grid-column: 1;
+    flex-direction: column;
+    max-width: none;
+    margin: 0;
+  }
+  #rules-panel { flex: 1 1 auto; width: 100%; }
+
+  #controls {
+    grid-column: 2;
+    align-self: start;
+    max-width: none;
+    margin: 0;
+  }
 }
 
 .card {

@@ -11,6 +11,20 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Fixed top-right focus toggle: stays reachable even when the header is
+       hidden in minimal mode. Icon swaps via the body.minimal class. -->
+  <button id="minimal-toggle" type="button" aria-pressed="false"
+          aria-label="Minimal mode" title="Minimal mode">
+    <svg class="ico-contract" viewBox="0 0 24 24" width="20" height="20" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M10 4 V10 H4 M10 10 L4 4 M14 20 V14 H20 M14 14 L20 20" />
+    </svg>
+    <svg class="ico-expand" viewBox="0 0 24 24" width="20" height="20" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 10 V4 H10 M4 4 L10 10 M20 14 V20 H14 M20 20 L14 14" />
+    </svg>
+  </button>
+
   <header>
     <h1>CODENAMES</h1>
     <div id="setup">
@@ -88,7 +102,7 @@
   </section>
 
   <footer>
-    <span id="version">v1.3.1</span>
+    <span id="version">v1.3.4</span>
   </footer>
 
   <script type="module" src="ui.js"></script>

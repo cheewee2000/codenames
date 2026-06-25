@@ -10,6 +10,7 @@ const THEME_KEY = "codenames.theme";
 const CUSTOM_KEY = "codenames.customWords";
 const INSTR_MIN_KEY = "codenames.instructionsMinimized";
 const RULES_MIN_KEY = "codenames.rulesMinimized";
+const MINIMAL_KEY = "codenames.minimal";
 
 function loadSetting(key) {
   try { return localStorage.getItem(key); } catch (e) { return null; }
@@ -219,10 +220,26 @@ rulesToggle.addEventListener("click", () =>
   setCollapsed(rulesPanel, rulesToggle, RULES_MIN_KEY,
     !rulesPanel.classList.contains("collapsed")));
 
+// Minimal (focus) mode: hide title/deck/new-game/rules/version chrome so the
+// board and controls own the screen. Toggle lives in the always-visible
+// status bar; state persists like the collapse toggles above.
+const minimalToggle = el("minimal-toggle");
+function setMinimal(on) {
+  document.body.classList.toggle("minimal", on);
+  minimalToggle.setAttribute("aria-pressed", String(on));
+  const label = on ? "Show everything" : "Minimal mode";
+  minimalToggle.setAttribute("aria-label", label);
+  minimalToggle.title = label;
+  saveSetting(MINIMAL_KEY, on ? "1" : "0");
+}
+minimalToggle.addEventListener("click", () =>
+  setMinimal(!document.body.classList.contains("minimal")));
+
 // Restore saved minimized state.
 (function restoreCollapsed() {
   setCollapsed(instrSection, instrToggle, INSTR_MIN_KEY, loadSetting(INSTR_MIN_KEY) === "1");
   setCollapsed(rulesPanel, rulesToggle, RULES_MIN_KEY, loadSetting(RULES_MIN_KEY) === "1");
+  setMinimal(loadSetting(MINIMAL_KEY) === "1");
 })();
 
 el("submit-clue").addEventListener("click", onSubmitClue);
