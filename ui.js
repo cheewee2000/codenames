@@ -8,6 +8,8 @@ const CUSTOM = "Custom…";
 const MIN_WORDS = 25;
 const THEME_KEY = "codenames.theme";
 const CUSTOM_KEY = "codenames.customWords";
+const INSTR_MIN_KEY = "codenames.instructionsMinimized";
+const RULES_MIN_KEY = "codenames.rulesMinimized";
 
 function loadSetting(key) {
   try { return localStorage.getItem(key); } catch (e) { return null; }
@@ -103,7 +105,7 @@ function render() {
       teamEmoji(game.winner) + " " + teamLabel(game.winner) + " WINS" + (byAssassin ? " (assassin!)" : "");
   }
 
-  el("instructions").innerHTML = instructionFor(game);
+  el("instructions-body").innerHTML = instructionFor(game);
 }
 
 function onCardClick(i) {
@@ -184,6 +186,38 @@ revealBtn.addEventListener("mouseleave", hideKey);
 revealBtn.addEventListener("touchstart", (e) => { e.preventDefault(); showKey(); }, { passive: false });
 revealBtn.addEventListener("touchend", (e) => { e.preventDefault(); hideKey(); });
 revealBtn.addEventListener("touchcancel", hideKey);
+
+// Collapsible guide: minimize the per-turn instructions and the How-to-Play
+// panel so the board and Spymaster button can fill the screen. Persisted.
+function setCollapsed(section, toggle, key, min) {
+  section.classList.toggle("collapsed", min);
+  toggle.setAttribute("aria-expanded", String(!min));
+  saveSetting(key, min ? "1" : "0");
+}
+
+const instrSection = el("instructions");
+const instrToggle = el("instructions-toggle");
+instrToggle.addEventListener("click", () => {
+  const min = !instrSection.classList.contains("collapsed");
+  instrToggle.textContent = min ? "▸" : "▾";
+  instrToggle.title = min ? "Show instructions" : "Minimize instructions";
+  setCollapsed(instrSection, instrToggle, INSTR_MIN_KEY, min);
+});
+
+const rulesPanel = el("rules-panel");
+const rulesToggle = el("rules-toggle");
+rulesToggle.addEventListener("click", () =>
+  setCollapsed(rulesPanel, rulesToggle, RULES_MIN_KEY,
+    !rulesPanel.classList.contains("collapsed")));
+
+// Restore saved minimized state.
+(function restoreCollapsed() {
+  const instrMin = loadSetting(INSTR_MIN_KEY) === "1";
+  instrToggle.textContent = instrMin ? "▸" : "▾";
+  instrToggle.title = instrMin ? "Show instructions" : "Minimize instructions";
+  setCollapsed(instrSection, instrToggle, INSTR_MIN_KEY, instrMin);
+  setCollapsed(rulesPanel, rulesToggle, RULES_MIN_KEY, loadSetting(RULES_MIN_KEY) === "1");
+})();
 
 el("submit-clue").addEventListener("click", onSubmitClue);
 el("clue-word").addEventListener("keydown", (e) => { if (e.key === "Enter") onSubmitClue(); });
